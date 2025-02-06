@@ -248,8 +248,9 @@ No code here; I want you to provide three questions that this data suggests to y
 
 **Answer**
 
-1.  
+1.  Which department has the highest number of possible credits by term
 
-2.  
+2.  What is the average number of classes an instructor teaches
 
-3.  
+3.  Which department has had the most growth in seat # and which department has
+    had a decrease in the # of seats
