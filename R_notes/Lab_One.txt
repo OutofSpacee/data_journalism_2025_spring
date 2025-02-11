@@ -1,0 +1,48 @@
+Should library --tidyverse
+    It imports: 
+        dplyr --readr --forcats --stringr --ggplot2 --tibble --lubridate --purr --tidyr
+
+install.packages('--')
+    Installs the packages
+
+read_rds('')
+    Loads data in .rds files
+
+glimpse()
+    Gets a sense of the data
+
+head()
+tail()
+    Top and bottom 6 rows of the data
+
+|>
+    pipe operator allows things to be done to a dataset
+
+group_by()
+    groups data set by column in ()
+
+summarise()
+    makes new pane to allow operations on the group_by
+
+n()
+    counts the number of a certain thing
+    EX:
+        umd_courses |>
+            group_by(term) |>
+            summarise(
+                count_classes = n()
+            )
+
+arrange(desc()) ... descending order
+arrange() ... ascending is default
+arrange(x, y) ... x comes before y in panel
+
+sum()
+    Taking the total of all x in whichever column
+
+mean()
+median()
+min()
+max()
+
+            

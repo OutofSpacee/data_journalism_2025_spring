@@ -254,3 +254,26 @@ No code here; I want you to provide three questions that this data suggests to y
 
 3.  Which department has had the most growth in seat # and which department has
     had a decrease in the # of seats
+
+```{r}
+journalism_courses <- umd_courses |> filter(department == "Journalism")
+
+head(journalism_courses)
+
+selected_jour_courses <- journalism_courses |> 
+  select(id,title) #selects certain columns
+
+head(selected_jour_courses)
+```
+
+```{r}
+
+umd_courses |>
+  filter (department == "Theatre") |>
+  filter (seats >= 15)
+
+
+umd_courses |> 
+  filter (department == "Theatre" & seats >= 15)
+
+```
