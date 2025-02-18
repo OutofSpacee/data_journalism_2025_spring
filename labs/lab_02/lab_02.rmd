@@ -49,7 +49,7 @@ nrow(climate_offered)
 
 ```
 
-**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why? **I find it interesting that University Honors has 51 classes with Climate in the title because it tends not be a hard science and may point to Climate representing more than what we may want to see.**
+**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why? **I find it interesting that University Honors has 21 classes with Climate in the title because it tends not be a hard science and may point to Climate representing more than what we may want to see.**
 
 **Q3** Which departments offered the most courses in the Fall 2024 term? And which departments in that term have at least one syllabus posted? Answer both of those questions and then compare the top five departments - how are they different?
 
@@ -64,6 +64,9 @@ nrow(climate_offered)
 
     # distinct(umd_courses, term) |>
       # arrange(desc(term))
+
+filter(term == 202408 & syllabus_count >=1)
+
 
 sylly_check <- umd_courses |>
   group_by(department) |>
@@ -101,6 +104,10 @@ maryland_expenses_date <- maryland_expenses_date |>
   )
 
 maryland_expenses_date
+
+
+
+
 
 ```
 
