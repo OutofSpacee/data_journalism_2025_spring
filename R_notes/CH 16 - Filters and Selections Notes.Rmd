@@ -1,0 +1,38 @@
+---
+title: "CH 16 - Filters and Selections Notes"
+author: "Theo Rose"
+date: "2025-02-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries}
+library(tidyverse)
+```
+
+```{r Importing the Data}
+# Ensure "umd_courses.rds" is in the directory of this .Rmd
+umd_courses <- read_rds("umd_courses.rds")
+```
+
+```{r filter function}
+# filter()
+
+journalism_courses <- umd_courses |>
+  filter(department == "Journalism")
+
+head(journalism_courses)
+
+```
+
+```{r to simplify}
+
+selected_journalism_courses <- journalism_courses |>
+  select(id,title)
+
+head(selected_journalism_courses)
+```
+

@@ -1,0 +1,26 @@
+---
+title: "Lab_Two"
+author: "Theo Rose"
+date: "2025-02-13"
+output: html_document
+---
+
+```{r}
+# str_detect(col_name, "text_to_look_for")
+# str_like(string, pattern, ignore_case = TRUE)
+
+fruit <- c("apple", "banana", "pear", "pineapple")
+
+str_like(fruit, "app")
+str_like(fruit, "app%")
+str_like(fruit, "ba_ana")
+str_like(fruit, "%APPLE")
+```
+
+```{r mutate/dates}
+# mutate(expenditure_date=mdy(expenditure_date))
+  # altering the expenditure_date to make it a date
+
+# mutate(month = floor_date(expenditure_date, "month"))
+  # sets the days for each month to 01
+```

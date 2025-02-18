@@ -1,0 +1,153 @@
+---
+title: "lab_02"
+author: "Derek Willis"
+date: "2025-01-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load libraries and establish settings
+
+```{r}
+# Turn off scientific notation
+options(scipen=999)
+
+# Load the tidyverse. If you have not installed the tidyverse already, remove the # from the next line and run it first.  
+# install.packages('tidyverse')
+library(tidyverse)
+library(lubridate)
+```
+
+## Load Data
+
+Let's keep working with the UMD courses and Maryland campaign expense data we used in the pre_lab.
+
+```{r}
+umd_courses <- read_rds("data/umd_courses.rds")
+maryland_expenses <- read_csv("data/maryland_expenses.csv")
+```
+
+## Answer questions
+
+**Q1.** How many departments have offered the courses with "Climate" in the title and at least one seat? Which department has offered the most? ** 32 departments have offered courses with "Climate" in the title and had at least one seat. Atmospheric and Oceanic Science was the department which offered the most.**
+
+```{r}
+climate_offered <- umd_courses |>
+  filter(str_detect(title, "Climate") & seats >= 1) |>
+  group_by(department) |>
+  summarise(
+    climate_classes = n()
+  ) |>
+  arrange(desc(climate_classes))
+
+climate_offered
+
+nrow(climate_offered)
+
+```
+
+**Q2.** Of the departments listed in A1, which one is the most interesting to you, and why? **I find it interesting that University Honors has 51 classes with Climate in the title because it tends not be a hard science and may point to Climate representing more than what we may want to see.**
+
+**Q3** Which departments offered the most courses in the Fall 2024 term? And which departments in that term have at least one syllabus posted? Answer both of those questions and then compare the top five departments - how are they different?
+
+**Business and Management, the School of Music, and Information Studies	were the top three departments offering the most courses in the Fall 2024 term. 134 of the 196 departments in the Fall 2024 term had at least one syllabus posted. They differ in the number of syllabi in their department compared to the number of courses offered. The Business and Management department offered 174 courses and had 372 syllabi posted compared to the English department's course offering of 125 classes with only 26 syllabi provided.**
+
+```{r}
+
+# Could not figure out how to determine which term was for fall 2024 so . . .
+  # Looked up in Google machine and found distinct(.data, x) function
+  # The commented code below is the code I wrote to determine that 202408 is the fall 
+  # 2024 semester
+
+    # distinct(umd_courses, term) |>
+      # arrange(desc(term))
+
+sylly_check <- umd_courses |>
+  group_by(department) |>
+  filter(term == '202408') |>
+  summarise(
+    syllabus_count_sum = sum(syllabus_count),
+    course_count = n()
+  ) |>
+  filter(syllabus_count_sum > 0) |> # Filtering out departments that had less than 1 syllabus                                       count
+  arrange(desc(course_count))
+
+head(sylly_check)
+```
+
+**Q4.** Using the Maryland campaign expenses data, change the datatype of the expenditure_date column so that it is a date and not a chr, saving the result as a new dataframe. Then create a new column for the month based on expenditure_date. Then write code that shows total amount spent each month by Wes Moore's committee (you'll need to search the data to find the exact name, and we're not looking in payee_name). Write a sentence describing the pattern of spending over time. 
+**It remain decently steady for just under a year before increasing and hit a high with just over three million donnated in one month.**
+
+```{r}
+
+maryland_expenses_date <- maryland_expenses |>
+  mutate(expenditure_date=mdy(expenditure_date))
+
+head(maryland_expenses_date)
+
+maryland_expenses_date <- maryland_expenses_date |>
+  mutate(month = floor_date(expenditure_date, "month"))
+
+head(maryland_expenses_date)
+
+maryland_expenses_date <- maryland_expenses_date |>
+  filter(committee_name =='Moore  Wes For Maryland') |>
+  group_by(month) |>
+  summarise(
+    total_amount = sum(amount)
+  )
+
+maryland_expenses_date
+
+```
+
+**Q5.** Using case_when(), create a column in the Maryland expenses data called `spending_location` indicating whether each record spent money in Maryland or outside Maryland. For records that are in Maryland, make the new column's value "In-state" and for all others, make it "Out of state". Then write code that shows the total amount of money spent in each category and describe the results. You can do this in one statement or break it up into two statements (saving the new column to your dataframe). **The majority of the funds came from within the state of Maryland but a decent chunk came from outside of the state, just a bit under half of the amount of in-state funds.**
+
+```{r}
+
+maryland_expenses <- read_csv("data/maryland_expenses.csv")
+
+maryland_expenses <- maryland_expenses |>
+  mutate(
+    spending_location = case_when(
+        str_detect(address, " Maryland ") ~ "In-state",
+        str_detect(address, " California ") ~ "Out of state",
+        str_detect(address, " Washington ") ~ "Out of state",
+        str_detect(address, " Louisiana ") ~ "Out of state",
+        str_detect(address, " Florida ") ~ "Out of state",
+        str_detect(address, " North Carolina ") ~ "Out of state",
+        str_detect(address, " Massachusetts ") ~ "Out of state",
+        str_detect(address, " West Virginia ") ~ "Out of state",
+        str_detect(address, " Virginia ") ~ "Out of state"
+    )
+  ) 
+
+spending_tot_by_loc <- maryland_expenses |>
+  group_by(spending_location) |>
+  summarise(
+    total_amount = sum(amount)
+  )
+
+spending_tot_by_loc
+
+```
+
+**Q6.** Choose your own adventure: using either the UMD courses or campaign expenses data, ask and answer a question that is different than the previous ones. You can use one of the ones you provided in the pre_lab. **Question: Which committees are top donors and what was the number of media expenses? A: Blair David for Montgomery, Lierman Brooke for Maryland, Adams Tim(Timothy) Friends of donnated the most amounts where they each respectively did expenditures for media 74, 58 and 69 times. **
+
+```{r}
+
+top_donors <- maryland_expenses |>
+  filter(expense_category == 'Media') |>
+  group_by(committee_name) |>
+  summarise(
+    total_amount = sum(amount),
+    total_media_expenses = n()
+  ) |>
+  arrange(desc(total_amount))
+
+top_donors
+
+```
