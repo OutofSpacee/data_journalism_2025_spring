@@ -51,12 +51,12 @@ pg_schools <- maryland_agency_payments |>
   clean_names() |> 
   rename(source = agency_name) |> 
   mutate(source = str_to_upper(source), vendor_name = str_to_upper(vendor_name)) |>
-  filter(str_detect(vendor_name, "PRINCE") &
-           str_detect(vendor_name, "GEORGE") &
-           str_detect(vendor_name, "CO") &
-           str_detect(vendor_name, "SCH") |
-           str_detect(vendor_name, "PRINCE GEORGE CO SCH SYS") |
-           str_detect(vendor_name, "PGCP"))
+  filter(
+    str_detect(vendor_name, "PRINCE") &
+    str_detect(vendor_name, "GEORGE") &
+    str_detect(vendor_name, "SCH") |
+    str_detect(vendor_name, "PRINCE GEORGE CO SCH SYS") |
+    str_detect(vendor_name, "PGCP"))
 
 ```
 
